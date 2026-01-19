@@ -73,32 +73,62 @@
         const noResults = document.getElementById('noResults');
         const clearSearchBtn = document.getElementById('clearSearchBtn');
 
-        // Sample featured sites (will be replaced with real data in Phase 4)
-        const sampleSites = [
-            {
-                domain: 'mysite',
-                tld: 'vc',
-                title: 'My Portfolio',
-                description: 'A showcase of my web development projects and skills',
-                tags: ['portfolio', 'webdev', 'javascript']
-            },
-            {
-                domain: 'devtools',
-                tld: 'lit',
-                title: 'Developer Tools',
-                description: 'Useful tools and utilities for developers',
-                tags: ['tools', 'utilities', 'productivity']
-            },
-            {
-                domain: 'blog',
-                tld: 'at',
-                title: 'Tech Blog',
-                description: 'Thoughts on technology, programming, and innovation',
-                tags: ['blog', 'tech', 'programming']
-            }
-        ];
+        // API base URL
+        const API_BASE = 'https://virt-protocol-production.up.railway.app/api';
 
-        function displayFeaturedSites() {
+        async function displayFeaturedSites() {
+            try {
+                // Try to get some featured sites from the API (search for common terms)
+                const response = await fetch(`${API_BASE}/search?q=portfolio`);
+                if (response.ok) {
+                    const sites = await response.json();
+                    const featuredSites = sites.slice(0, 6); // Show up to 6 featured sites
+
+                    const featuredGrid = featuredSection.querySelector('.grid');
+                    if (featuredSites.length > 0) {
+                        featuredGrid.innerHTML = featuredSites.map(site => `
+                            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition cursor-pointer"
+                                 onclick="window.location.href='virt://${site.domain}.${site.tld}'">
+                                <h3 class="text-xl font-semibold text-gray-900 mb-2">${site.title || 'Untitled'}</h3>
+                                <p class="text-blue-600 mb-2 font-mono">virt://${site.domain}.${site.tld}</p>
+                                <p class="text-gray-700 mb-3">${site.description || 'No description available'}</p>
+                            </div>
+                        `).join('');
+                    } else {
+                        // Fallback to sample sites if no real sites found
+                        displaySampleFeaturedSites();
+                    }
+                } else {
+                    displaySampleFeaturedSites();
+                }
+            } catch (error) {
+                console.error('Failed to load featured sites:', error);
+                displaySampleFeaturedSites();
+            }
+        }
+
+        function displaySampleFeaturedSites() {
+            const sampleSites = [
+                {
+                    domain: 'mysite',
+                    tld: 'vc',
+                    title: 'My Portfolio',
+                    description: 'A showcase of my web development projects and skills'
+                },
+                {
+                    domain: 'devtools',
+                    tld: 'lit',
+                    title: 'Developer Tools',
+                    description: 'Useful tools and utilities for developers'
+                },
+                {
+                    domain: 'blog',
+                    tld: 'at',
+                    title: 'Tech Blog',
+                    description: 'Thoughts on technology, programming, and innovation'
+                }
+            ];
+
             const featuredGrid = featuredSection.querySelector('.grid');
             featuredGrid.innerHTML = sampleSites.map(site => `
                 <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition cursor-pointer"
@@ -106,18 +136,11 @@
                     <h3 class="text-xl font-semibold text-gray-900 mb-2">${site.title}</h3>
                     <p class="text-blue-600 mb-2 font-mono">virt://${site.domain}.${site.tld}</p>
                     <p class="text-gray-700 mb-3">${site.description}</p>
-                    ${site.tags && site.tags.length > 0 ? `
-                        <div class="flex flex-wrap gap-2">
-                            ${site.tags.slice(0, 3).map(tag =>
-                                `<span class="px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded">${tag}</span>`
-                            ).join('')}
-                        </div>
-                    ` : ''}
                 </div>
             `).join('');
         }
 
-        function performSearch(query = '') {
+        async function performSearch(query = '') {
             if (!query.trim()) {
                 // Show featured sites
                 featuredSection.classList.remove('hidden');
@@ -126,39 +149,40 @@
                 return;
             }
 
-            // Show results section
+            // Show loading state
             featuredSection.classList.add('hidden');
             resultsSection.classList.remove('hidden');
-
-            // Simulate search (will be replaced with real API in Phase 4)
-            const filteredSites = sampleSites.filter(site =>
-                site.title.toLowerCase().includes(query.toLowerCase()) ||
-                site.description.toLowerCase().includes(query.toLowerCase()) ||
-                site.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
-            );
-
-            if (filteredSites.length === 0) {
-                resultsDiv.innerHTML = '';
-                noResults.classList.remove('hidden');
-                return;
-            }
-
+            resultsDiv.innerHTML = '<div class="text-center py-8"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div><p class="mt-4 text-gray-600">Searching...</p></div>';
             noResults.classList.add('hidden');
-            resultsDiv.innerHTML = filteredSites.map(site => `
-                <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition cursor-pointer"
-                     onclick="window.location.href='virt://${site.domain}.${site.tld}'">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">${site.title}</h3>
-                    <p class="text-blue-600 mb-2 font-mono">virt://${site.domain}.${site.tld}</p>
-                    <p class="text-gray-700 mb-3">${site.description}</p>
-                    ${site.tags && site.tags.length > 0 ? `
-                        <div class="flex flex-wrap gap-2">
-                            ${site.tags.slice(0, 5).map(tag =>
-                                `<span class="px-2 py-1 bg-gray-100 text-gray-600 text-sm rounded">${tag}</span>`
-                            ).join('')}
-                        </div>
-                    ` : ''}
-                </div>
-            `).join('');
+
+            try {
+                const response = await fetch(`${API_BASE}/search?q=${encodeURIComponent(query)}`);
+
+                if (!response.ok) {
+                    throw new Error(`Search failed: ${response.status}`);
+                }
+
+                const sites = await response.json();
+
+                if (sites.length === 0) {
+                    resultsDiv.innerHTML = '';
+                    noResults.classList.remove('hidden');
+                    return;
+                }
+
+                noResults.classList.add('hidden');
+                resultsDiv.innerHTML = sites.map(site => `
+                    <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition cursor-pointer"
+                         onclick="window.location.href='virt://${site.domain}.${site.tld}'">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">${site.title || 'Untitled'}</h3>
+                        <p class="text-blue-600 mb-2 font-mono">virt://${site.domain}.${site.tld}</p>
+                        <p class="text-gray-700 mb-3">${site.description || 'No description available'}</p>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Search error:', error);
+                resultsDiv.innerHTML = '<div class="text-center py-8 text-red-600"><p>Search failed. Please try again later.</p></div>';
+            }
         }
 
         // Initialize
