@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lookin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
+    <div class="max-w-4xl mx-auto py-12 px-4">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <div class="mb-4">
+                <img src="lookin-logo.png" alt="lookin.at" class="h-24 mx-auto">
+            </div>
+            <p class="text-xl text-gray-600 mb-8">Discover amazing sites on the virtual web</p>
+
+            <!-- Search Bar -->
+            <div class="max-w-2xl mx-auto">
+                <div class="relative">
+                    <input
+                        type="text"
+                        id="searchInput"
+                        class="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-full focus:outline-none focus:border-blue-500 shadow-lg"
+                        placeholder="Search for sites, projects, or creators..."
+                    >
+                    <button id="searchBtn" class="absolute right-3 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Sites -->
+        <div id="featuredSection" class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Featured Sites</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Featured sites will be populated here -->
+            </div>
+        </div>
+
+        <!-- Search Results -->
+        <div id="resultsSection" class="hidden">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Search Results</h2>
+            <div id="results" class="space-y-6">
+                <!-- Search results will be populated here -->
+            </div>
+        </div>
+
+        <!-- No Results -->
+        <div id="noResults" class="hidden text-center py-12">
+            <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-2">No sites found</h3>
+            <p class="text-gray-600 mb-6">Try a different search term or check back later for new sites.</p>
+            <button id="clearSearchBtn" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
+                Clear Search
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const featuredSection = document.getElementById('featuredSection');
+        const resultsSection = document.getElementById('resultsSection');
+        const resultsDiv = document.getElementById('results');
+        const noResults = document.getElementById('noResults');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
+
+        // Sample featured sites (will be replaced with real data in Phase 4)
+        const sampleSites = [
+            {
+                domain: 'mysite',
+                tld: 'vc',
+                title: 'My Portfolio',
+                description: 'A showcase of my web development projects and skills',
+                tags: ['portfolio', 'webdev', 'javascript']
+            },
+            {
+                domain: 'devtools',
+                tld: 'lit',
+                title: 'Developer Tools',
+                description: 'Useful tools and utilities for developers',
+                tags: ['tools', 'utilities', 'productivity']
+            },
+            {
+                domain: 'blog',
+                tld: 'at',
+                title: 'Tech Blog',
+                description: 'Thoughts on technology, programming, and innovation',
+                tags: ['blog', 'tech', 'programming']
+            }
+        ];
+
+        function displayFeaturedSites() {
+            const featuredGrid = featuredSection.querySelector('.grid');
+            featuredGrid.innerHTML = sampleSites.map(site => `
+                <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition cursor-pointer"
+                     onclick="window.location.href='virt://${site.domain}.${site.tld}'">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">${site.title}</h3>
+                    <p class="text-blue-600 mb-2 font-mono">virt://${site.domain}.${site.tld}</p>
+                    <p class="text-gray-700 mb-3">${site.description}</p>
+                    ${site.tags && site.tags.length > 0 ? `
+                        <div class="flex flex-wrap gap-2">
+                            ${site.tags.slice(0, 3).map(tag =>
+                                `<span class="px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded">${tag}</span>`
+                            ).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function performSearch(query = '') {
+            if (!query.trim()) {
+                // Show featured sites
+                featuredSection.classList.remove('hidden');
+                resultsSection.classList.add('hidden');
+                noResults.classList.add('hidden');
+                return;
+            }
+
+            // Show results section
+            featuredSection.classList.add('hidden');
+            resultsSection.classList.remove('hidden');
+
+            // Simulate search (will be replaced with real API in Phase 4)
+            const filteredSites = sampleSites.filter(site =>
+                site.title.toLowerCase().includes(query.toLowerCase()) ||
+                site.description.toLowerCase().includes(query.toLowerCase()) ||
+                site.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
+            );
+
+            if (filteredSites.length === 0) {
+                resultsDiv.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            resultsDiv.innerHTML = filteredSites.map(site => `
+                <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition cursor-pointer"
+                     onclick="window.location.href='virt://${site.domain}.${site.tld}'">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">${site.title}</h3>
+                    <p class="text-blue-600 mb-2 font-mono">virt://${site.domain}.${site.tld}</p>
+                    <p class="text-gray-700 mb-3">${site.description}</p>
+                    ${site.tags && site.tags.length > 0 ? `
+                        <div class="flex flex-wrap gap-2">
+                            ${site.tags.slice(0, 5).map(tag =>
+                                `<span class="px-2 py-1 bg-gray-100 text-gray-600 text-sm rounded">${tag}</span>`
+                            ).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Initialize
+        displayFeaturedSites();
+
+        // Search functionality
+        let searchTimeout;
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                performSearch(e.target.value);
+            }, 300);
+        });
+
+        searchBtn.addEventListener('click', () => {
+            performSearch(searchInput.value);
+        });
+
+        // Clear search
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            performSearch('');
+        });
+
+        // Enter key support
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                performSearch(searchInput.value);
+            }
+        });
+    </script>
+</body>
+</html>

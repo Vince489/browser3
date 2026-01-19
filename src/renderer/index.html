@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V12 Browser</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        /* Modern scrollbar styling */
+        #contentArea {
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+        }
+
+        #contentArea::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #contentArea::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        #contentArea::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 20px;
+        }
+
+        /* Ensure local content doesn't touch the edges when scrolling */
+        .local-content-wrapper {
+            padding: 2rem 1rem;
+        }
+
+        /* Ensure the webview inside fills the space exactly */
+        webview {
+            display: flex;
+            flex: 1;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="h-screen bg-white overflow-hidden flex flex-col">
+        <!-- Tab Bar -->
+        <div class="bg-gray-200 px-1 pt-1 flex items-end gap-1 border-b border-gray-300">
+            <div id="tabContainer" class="flex items-end gap-1 flex-1 overflow-x-auto">
+                <!-- Tabs will be inserted here -->
+            </div>
+            <button id="newTabBtn" class="px-3 py-2 hover:bg-gray-200 rounded-t transition mb-1">
+                <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Address Bar & Controls -->
+        <div class="bg-white px-3 py-2 flex items-center gap-3 border-b border-gray-200">
+            <!-- Navigation Controls -->
+            <div class="flex gap-1">
+                <button id="backBtn" class="p-2 hover:bg-gray-100 rounded transition">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                </button>
+                <button id="forwardBtn" class="p-2 hover:bg-gray-100 rounded transition">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+                <button id="refreshBtn" class="p-2 hover:bg-gray-100 rounded transition">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Address Bar -->
+            <div class="flex-1 flex items-center bg-gray-100 rounded-full px-4 py-1.5 border border-gray-200">
+                <svg class="w-4 h-4 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+                <input type="text" id="addressBar" class="flex-1 bg-transparent outline-none text-sm text-gray-700" value="virt://lookin.at">
+                <button id="bookmarkBtn" class="ml-2 p-1 hover:bg-gray-200 rounded transition" title="Bookmark this page">
+                    <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Extension Icons -->
+            <div class="flex gap-2">
+                <button class="p-2 hover:bg-gray-100 rounded transition">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </button>
+                <button class="p-2 hover:bg-gray-100 rounded transition">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Profile & Menu -->
+            <div class="flex gap-2">
+                <button class="relative">
+                    <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium">
+                        JS
+                    </div>
+                </button>
+                <div class="relative">
+                    <button id="menuBtn" class="p-2 hover:bg-gray-100 rounded transition">
+                        <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"></path>
+                        </svg>
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div id="dropdownMenu" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                        <div class="py-2">
+                            <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-50 transition">
+                                <svg class="w-5 h-5 text-gray-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path>
+                                </svg>
+                                <span class="text-sm text-gray-700">New Tab</span>
+                                <span class="ml-auto text-xs text-gray-400">Ctrl+T</span>
+                            </a>
+                            <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-50 transition">
+                                <svg class="w-5 h-5 text-gray-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                                <span class="text-sm text-gray-700">History</span>
+                                <span class="ml-auto text-xs text-gray-400">Ctrl+H</span>
+                            </a>
+                            <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-50 transition">
+                                <svg class="w-5 h-5 text-gray-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                                </svg>
+                                <span class="text-sm text-gray-700">Downloads</span>
+                                <span class="ml-auto text-xs text-gray-400">Ctrl+J</span>
+                            </a>
+                            <hr class="my-2">
+                            <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-50 transition">
+                                <svg class="w-5 h-5 text-gray-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <span class="text-sm text-gray-700">Settings</span>
+                            </a>
+                            <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-50 transition">
+                                <svg class="w-5 h-5 text-gray-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span class="text-sm text-gray-700">Help</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookmark Bar -->
+        <div class="bg-gray-50 px-3 py-1 border-b border-gray-200 flex items-center gap-3 overflow-x-auto" id="bookmarkBar">
+            <!-- User bookmarks will be loaded here -->
+        </div>
+
+        <!-- Content Area -->
+        <div id="contentArea" class="bg-white flex-1 overflow-y-auto relative flex flex-col">
+            <!-- Content will be loaded here based on active tab -->
+            <!-- Can contain either local content divs or webview elements -->
+        </div>
+    </div>
+
+    <script>
+        let tabCounter = 0;
+        const tabs = [];
+
+        // Sample content for different tabs
+        const contentTemplates = {
+            feed: `
+                <div class="max-w-2xl mx-auto space-y-6">
+                    <h1 class="text-3xl font-bold text-gray-900 mb-6">Community Feed</h1>
+                    
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center text-white font-medium">AM</div>
+                            <div>
+                                <div class="font-semibold text-gray-900">Alex Morgan</div>
+                                <div class="text-sm text-gray-500">2 hours ago</div>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Just launched my new portfolio site!</h3>
+                        <p class="text-gray-700 mb-4">After months of work, I'm excited to share my redesigned portfolio. Built with modern web technologies and optimized for performance. Check it out and let me know what you think!</p>
+                        <div class="flex gap-4 text-sm text-gray-500">
+                            <button class="flex items-center gap-1 hover:text-blue-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                124
+                            </button>
+                            <button class="flex items-center gap-1 hover:text-blue-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                                38
+                            </button>
+                            <button class="flex items-center gap-1 hover:text-blue-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                                Share
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-medium">SK</div>
+                            <div>
+                                <div class="font-semibold text-gray-900">Sarah Kim</div>
+                                <div class="text-sm text-gray-500">5 hours ago</div>
+                            </div>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Tips for better code reviews</h3>
+                        <p class="text-gray-700 mb-4">Code reviews are essential for maintaining quality. Here are my top 5 tips: 1) Be constructive, not critical 2) Focus on the code, not the person 3) Ask questions instead of making statements 4) Praise good solutions 5) Review promptly.</p>
+                        <div class="flex gap-4 text-sm text-gray-500">
+                            <button class="flex items-center gap-1 hover:text-blue-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                89
+                            </button>
+                            <button class="flex items-center gap-1 hover:text-blue-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                                22
+                            </button>
+                            <button class="flex items-center gap-1 hover:text-blue-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                                Share
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `,
+            search: `
+                <div class="max-w-3xl mx-auto">
+                    <div class="text-center mb-12">
+                        <h1 class="text-6xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">MySite Search</h1>
+                        <p class="text-gray-600">Find content, users, and communities</p>
+                    </div>
+                    <div class="bg-white rounded-full shadow-lg border border-gray-200 p-4 flex items-center mb-8">
+                        <svg class="w-6 h-6 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        <input type="text" placeholder="Search MySite..." class="flex-1 outline-none text-lg">
+                    </div>
+                    <div class="space-y-4">
+                        <div class="text-sm text-gray-500 mb-2">Popular searches</div>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-4 py-2 bg-gray-100 rounded-full text-sm text-gray-700 hover:bg-gray-200 cursor-pointer">Web Development</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full text-sm text-gray-700 hover:bg-gray-200 cursor-pointer">Design Trends</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full text-sm text-gray-700 hover:bg-gray-200 cursor-pointer">JavaScript Tutorials</span>
+                            <span class="px-4 py-2 bg-gray-100 rounded-full text-sm text-gray-700 hover:bg-gray-200 cursor-pointer">UI/UX Best Practices</span>
+                        </div>
+                    </div>
+                </div>
+            `,
+            profile: `
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-gradient-to-r from-blue-500 to-purple-600 h-48 rounded-t-lg"></div>
+                    <div class="bg-white rounded-b-lg shadow-lg p-8 -mt-16 relative">
+                        <div class="flex items-start gap-6">
+                            <div class="w-32 h-32 rounded-full bg-white border-4 border-white shadow-lg flex items-center justify-center text-4xl font-bold text-blue-600">JS</div>
+                            <div class="flex-1 pt-12">
+                                <h1 class="text-3xl font-bold text-gray-900">John Smith</h1>
+                                <p class="text-gray-600 mb-4">@johnsmith • Web Developer & Designer</p>
+                                <p class="text-gray-700 mb-4">Passionate about creating beautiful, functional web experiences. Coffee enthusiast ☕ | Open source contributor 🚀</p>
+                                <div class="flex gap-6 text-sm">
+                                    <div><span class="font-semibold text-gray-900">342</span> <span class="text-gray-600">Following</span></div>
+                                    <div><span class="font-semibold text-gray-900">1.2K</span> <span class="text-gray-600">Followers</span></div>
+                                    <div><span class="font-semibold text-gray-900">89</span> <span class="text-gray-600">Posts</span></div>
+                                </div>
+                                <div class="flex gap-3 mt-4">
+                                    <button class="px-6 py-2 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition">Follow</button>
+                                    <button class="px-6 py-2 border border-gray-300 text-gray-700 rounded-full font-medium hover:bg-gray-50 transition">Message</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-8">
+                            <h2 class="text-xl font-semibold mb-4">Recent Posts</h2>
+                            <div class="space-y-4">
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h3 class="font-semibold mb-2">Excited about the new React 18 features!</h3>
+                                    <p class="text-gray-600 text-sm mb-2">Just spent the weekend exploring the new concurrent features and automatic batching. The performance improvements are incredible.</p>
+                                    <div class="flex items-center gap-4 text-sm text-gray-500">
+                                        <span>2 days ago</span>
+                                        <button class="flex items-center gap-1 hover:text-blue-600">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                            23
+                                        </button>
+                                        <button class="flex items-center gap-1 hover:text-blue-600">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                                            8
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h3 class="font-semibold mb-2">Check out my latest project</h3>
+                                    <p class="text-gray-600 text-sm mb-2">Built a real-time collaborative code editor using WebSockets and Monaco Editor. The live cursors and syntax highlighting make pair programming so much better!</p>
+                                    <div class="flex items-center gap-4 text-sm text-gray-500">
+                                        <span>1 week ago</span>
+                                        <button class="flex items-center gap-1 hover:text-blue-600">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                            67
+                                        </button>
+                                        <button class="flex items-center gap-1 hover:text-blue-600">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                                            15
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            bookmarks: `
+                <div class="max-w-4xl mx-auto">
+                    <h1 class="text-3xl font-bold text-gray-900 mb-6">Bookmarks</h1>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition cursor-pointer">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-8 h-8 rounded bg-blue-100 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-900">MDN Web Docs</h3>
+                                    <p class="text-sm text-gray-600">developer.mozilla.org</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-700">Comprehensive web development documentation and tutorials.</p>
+                        </div>
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition cursor-pointer">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-8 h-8 rounded bg-green-100 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-900">GitHub</h3>
+                                    <p class="text-sm text-gray-600">github.com</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-700">Code hosting platform for version control and collaboration.</p>
+                        </div>
+                        <div class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition cursor-pointer">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="w-8 h-8 rounded bg-purple-100 flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-900">Stack Overflow</h3>
+                                    <p class="text-sm text-gray-600">stackoverflow.com</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-700">Q&A platform for developers to ask and answer technical questions.</p>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+
+        // Tab management
+        function createTab(title, url, contentType = 'feed') {
+            tabCounter++;
+            const tabId = `tab-${tabCounter}`;
+
+            const tab = {
+                id: tabId,
+                title: title,
+                url: url,
+                contentType: contentType,
+                tabType: contentType === 'webview' ? 'webview' : 'local', // 'local' or 'webview'
+                webviewElement: null, // Will hold webview element for webview tabs
+                isActive: false
+            };
+
+            tabs.push(tab);
+
+            // Create tab element
+            const tabElement = document.createElement('div');
+            tabElement.id = tabId;
+            tabElement.className = 'flex items-end gap-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 cursor-pointer rounded-t transition text-sm text-gray-700 whitespace-nowrap min-w-[120px]';
+            tabElement.innerHTML = `
+                <div class="tab-favicon w-4 h-4 mr-1 flex-shrink-0">
+                    <img src="virt://favicon.ico" class="w-4 h-4 rounded-sm" onerror="this.style.display='none'" alt="">
+                </div>
+                <span class="flex-1 truncate">${title}</span>
+                <button class="ml-2 hover:bg-gray-300 rounded p-0.5 close-tab-btn" data-tab-id="${tabId}">
+                    <svg class="w-3 h-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            `;
+
+            // Add click handler for tab
+            tabElement.addEventListener('click', (e) => {
+                if (!e.target.closest('.close-tab-btn')) {
+                    switchToTab(tabId);
+                }
+            });
+
+            // Add close button handler
+            const closeBtn = tabElement.querySelector('.close-tab-btn');
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeTab(tabId);
+            });
+
+            document.getElementById('tabContainer').appendChild(tabElement);
+
+            return tabId;
+        }
+
+        function switchToTab(tabId) {
+            // Update tab states
+            tabs.forEach(tab => {
+                tab.isActive = tab.id === tabId;
+                const tabElement = document.getElementById(tab.id);
+                if (tabElement) {
+                    if (tab.isActive) {
+                        tabElement.classList.remove('bg-gray-100', 'text-gray-700');
+                        tabElement.classList.add('bg-white', 'text-gray-900');
+                    } else {
+                        tabElement.classList.remove('bg-white', 'text-gray-900');
+                        tabElement.classList.add('bg-gray-100', 'text-gray-700');
+                    }
+                }
+            });
+
+            // Load content for the active tab
+            const activeTab = tabs.find(tab => tab.isActive);
+            if (activeTab) {
+                loadTabContent(activeTab);
+                document.getElementById('addressBar').value = activeTab.url;
+            }
+        }
+
+        function closeTab(tabId) {
+            const tabIndex = tabs.findIndex(tab => tab.id === tabId);
+            if (tabIndex === -1) return;
+
+            const wasActive = tabs[tabIndex].isActive;
+            const tab = tabs[tabIndex];
+
+            // Clean up webview if it exists
+            if (tab.webviewElement) {
+                // Remove from DOM
+                if (tab.webviewElement.parentNode) {
+                    tab.webviewElement.parentNode.removeChild(tab.webviewElement);
+                }
+                // Clear reference
+                tab.webviewElement = null;
+            }
+
+            // Remove tab from array
+            tabs.splice(tabIndex, 1);
+
+            // Remove tab element
+            const tabElement = document.getElementById(tabId);
+            if (tabElement) {
+                tabElement.remove();
+            }
+
+            // If this was the active tab and there are other tabs, switch to another
+            if (wasActive && tabs.length > 0) {
+                const newActiveTab = tabs[Math.min(tabIndex, tabs.length - 1)];
+                switchToTab(newActiveTab.id);
+            } else if (tabs.length === 0) {
+                // No tabs left, clear content
+                document.getElementById('contentArea').innerHTML = '<div class="flex items-center justify-center h-full text-gray-500"><p>No tabs open</p></div>';
+            }
+        }
+
+        function loadTabContent(tab) {
+            const contentArea = document.getElementById('contentArea');
+
+            if (tab.tabType === 'webview') {
+                // Create or show webview for external URLs
+                if (!tab.webviewElement) {
+                    createWebviewForTab(tab);
+                }
+                // Clear content area and add webview
+                contentArea.innerHTML = '';
+                contentArea.appendChild(tab.webviewElement);
+            } else {
+                // Load local content
+                contentArea.innerHTML = contentTemplates[tab.contentType] || '<div class="flex items-center justify-center h-full text-gray-500"><p>Content not found</p></div>';
+            }
+        }
+
+        function createWebviewForTab(tab) {
+            const webview = document.createElement('webview');
+            webview.src = tab.url;
+            webview.style.width = '100%';
+            webview.style.height = '100%';
+            webview.style.border = 'none';
+            webview.style.backgroundColor = 'white';
+
+            // Additional attributes for better compatibility
+            webview.setAttribute('allowfullscreen', 'true');
+            webview.allowfullscreen = true;
+
+            // Web preferences for security and functionality
+            webview.setAttribute('webpreferences', 'contextIsolation=true,nodeIntegration=false,webSecurity=true,allowRunningInsecureContent=false,experimentalFeatures=false');
+
+            console.log('Creating webview for:', tab.url);
+
+            // Handle webview events
+            webview.addEventListener('dom-ready', () => {
+                console.log('Webview DOM ready for:', tab.url);
+                // Update tab title from page title if available
+                try {
+                    webview.executeJavaScript('document.title').then(title => {
+                        console.log('Webview title:', title);
+                        if (title && title !== tab.title) {
+                            tab.title = title;
+                            const tabElement = document.getElementById(tab.id);
+                            if (tabElement) {
+                                tabElement.querySelector('span').textContent = title;
+                            }
+                        }
+                    }).catch(e => {
+                        console.log('Could not get page title:', e);
+                    });
+
+                    // Extract favicon information
+                    extractFavicon(tab, webview);
+                } catch (e) {
+                    console.log('Could not execute JavaScript for title:', e);
+                }
+            });
+
+            // Update address bar when navigation occurs within the webview
+            webview.addEventListener('did-navigate', (event) => {
+                console.log('Webview navigated to:', event.url);
+                // Update tab URL
+                tab.url = event.url;
+
+                // ONLY update the address bar if the user isn't currently typing in it
+                const addressBar = document.getElementById('addressBar');
+                if (document.activeElement !== addressBar) {
+                    addressBar.value = event.url;
+                }
+
+                // Update bookmark star state
+                updateBookmarkStarState();
+            });
+
+            // Handle in-page navigation (hash changes, history API, etc.)
+            webview.addEventListener('did-navigate-in-page', (event) => {
+                console.log('Webview in-page navigation to:', event.url);
+                // Update tab URL
+                tab.url = event.url;
+
+                // ONLY update the address bar if the user isn't currently typing in it
+                const addressBar = document.getElementById('addressBar');
+                if (document.activeElement !== addressBar) {
+                    addressBar.value = event.url;
+                }
+
+                // Update bookmark star state
+                updateBookmarkStarState();
+            });
+
+            webview.addEventListener('did-start-loading', () => {
+                console.log('Webview started loading:', tab.url);
+            });
+
+            webview.addEventListener('did-stop-loading', () => {
+                console.log('Webview stopped loading:', tab.url);
+            });
+
+            webview.addEventListener('did-fail-load', (event) => {
+                // Error code -3 is just an aborted load, we can ignore it
+                if (event.errorCode === -3) return;
+
+                console.error('Webview failed to load:', tab.url, 'Error:', event.errorDescription, 'Error code:', event.errorCode);
+            });
+
+            webview.addEventListener('crashed', () => {
+                console.error('Webview crashed for:', tab.url);
+            });
+
+            webview.addEventListener('gpu-crashed', () => {
+                console.error('Webview GPU crashed for:', tab.url);
+            });
+
+            webview.addEventListener('console-message', (event) => {
+                console.log('Webview console [' + event.level + ']:', event.message);
+            });
+
+            tab.webviewElement = webview;
+        }
+
+        function loadContent(contentType) {
+            const contentArea = document.getElementById('contentArea');
+            contentArea.innerHTML = contentTemplates[contentType] || '<div class="flex items-center justify-center h-full text-gray-500"><p>Content not found</p></div>';
+        }
+
+        // Initialize the browser
+        function initBrowser() {
+            // Create initial tab
+            const initialTabId = createTab('New Tab', 'virt://lookin.at', 'webview');
+            switchToTab(initialTabId);
+
+            // Set up event listeners
+            setupEventListeners();
+        }
+
+        function setupEventListeners() {
+            // New tab button
+            document.getElementById('newTabBtn').addEventListener('click', () => {
+                const newTabId = createTab('New Tab', 'virt://lookin.at', 'webview');
+                switchToTab(newTabId);
+            });
+
+            // Address bar - handle navigation
+            document.getElementById('addressBar').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const input = e.target.value.trim();
+
+                    // Handle all URLs (VIRT and external) - navigate current tab
+                    if (input.startsWith('virt://') ||
+                        input.startsWith('https://') ||
+                        input.startsWith('http://') ||
+                        (!input.startsWith('virt://') && (input.includes('.') || input.includes('://')))) {
+
+                        let processedUrl;
+                        if (input.startsWith('virt://')) {
+                            processedUrl = input;
+                        } else if (input.startsWith('http')) {
+                            processedUrl = input;
+                        } else {
+                            processedUrl = `https://${input}`;
+                        }
+
+                        const title = input.startsWith('virt://') ? 'Loading VIRT page...' : 'Loading...';
+
+                        // Navigate current tab instead of creating new one
+                        const activeTab = tabs.find(tab => tab.isActive);
+                        if (activeTab) {
+                            // Update tab properties
+                            activeTab.url = processedUrl;
+                            activeTab.title = title;
+
+                            // Update tab display
+                            const tabElement = document.getElementById(activeTab.id);
+                            if (tabElement) {
+                                tabElement.querySelector('span').textContent = title;
+                            }
+
+                            // Navigate the webview
+                            if (activeTab.webviewElement) {
+                                activeTab.webviewElement.src = processedUrl;
+                            } else {
+                                // If not a webview tab, switch to webview mode
+                                activeTab.tabType = 'webview';
+                                loadTabContent(activeTab);
+                            }
+
+                            // Update address bar
+                            document.getElementById('addressBar').value = processedUrl;
+                        }
+
+                        return;
+                    }
+
+                    // For anything else, show an error or try to make it a search
+                    console.log('Invalid URL format:', input);
+                }
+            });
+
+            // Navigation buttons (back/forward/refresh)
+            document.getElementById('backBtn').addEventListener('click', () => {
+                const activeTab = tabs.find(tab => tab.isActive);
+                if (activeTab && activeTab.tabType === 'webview' && activeTab.webviewElement) {
+                    if (activeTab.webviewElement.canGoBack()) {
+                        activeTab.webviewElement.goBack();
+                    }
+                }
+            });
+
+            document.getElementById('forwardBtn').addEventListener('click', () => {
+                const activeTab = tabs.find(tab => tab.isActive);
+                if (activeTab && activeTab.tabType === 'webview' && activeTab.webviewElement) {
+                    if (activeTab.webviewElement.canGoForward()) {
+                        activeTab.webviewElement.goForward();
+                    }
+                }
+            });
+
+            document.getElementById('refreshBtn').addEventListener('click', () => {
+                const activeTab = tabs.find(tab => tab.isActive);
+                if (activeTab) {
+                    if (activeTab.tabType === 'webview' && activeTab.webviewElement) {
+                        activeTab.webviewElement.reload();
+                    } else {
+                        // Handle local content refresh
+                        loadContent(activeTab.contentType);
+                    }
+                }
+            });
+
+            // Bookmark bar links - simulate VIRT navigation
+            const bookmarkLinks = document.querySelectorAll('.bg-gray-50 a');
+            bookmarkLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const text = link.textContent.trim();
+                    let url, title, contentType;
+
+                    switch(text) {
+                        case 'My Feed':
+                            url = 'virt://mysite.vc/feed';
+                            title = 'My Feed';
+                            contentType = 'feed';
+                            break;
+                        case 'Favorites':
+                            url = 'virt://mysite.vc/favorites';
+                            title = 'Favorites';
+                            contentType = 'bookmarks';
+                            break;
+                        case 'Community':
+                            url = 'virt://mysite.vc/community';
+                            title = 'Community';
+                            contentType = 'feed';
+                            break;
+                        case 'Recent':
+                            url = 'virt://lookin.at';
+                            title = 'lookin.at';
+                            contentType = 'search';
+                            break;
+                        default:
+                            return;
+                    }
+
+                    const activeTab = tabs.find(tab => tab.isActive);
+                    if (activeTab) {
+                        activeTab.title = title;
+                        activeTab.contentType = contentType;
+                        activeTab.url = url;
+                        document.getElementById(activeTab.id).querySelector('span').textContent = title;
+                        document.getElementById('addressBar').value = url;
+                        loadContent(contentType);
+                    }
+                });
+            });
+
+            // Dropdown menu toggle
+            document.getElementById('menuBtn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                const dropdown = document.getElementById('dropdownMenu');
+                dropdown.classList.toggle('hidden');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                const dropdown = document.getElementById('dropdownMenu');
+                const menuBtn = document.getElementById('menuBtn');
+                if (!menuBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+
+            // Dropdown menu items
+            const menuItems = document.querySelectorAll('#dropdownMenu a');
+            menuItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const action = item.textContent.trim().toLowerCase().replace(/\s+/g, '');
+
+                    switch(action) {
+                        case 'newtab':
+                            const newTabId = createTab('New Tab', 'virt://lookin.at', 'webview');
+                            switchToTab(newTabId);
+                            break;
+                        case 'history':
+                            console.log('Open history');
+                            break;
+                        case 'downloads':
+                            console.log('Open downloads');
+                            break;
+                        case 'settings':
+                            console.log('Open settings');
+                            break;
+                        case 'help':
+                            console.log('Open help');
+                            break;
+                    }
+
+                    document.getElementById('dropdownMenu').classList.add('hidden');
+                });
+            });
+        }
+
+        // Global bookmarks data
+        let currentBookmarks = {
+            roots: {
+                bookmark_bar: {
+                    children: []
+                }
+            },
+            version: 1
+        };
+
+        // Favicon cache for better performance
+        const faviconCache = new Map();
+
+        // Extract favicon from a webview page
+        async function extractFavicon(tab, webview) {
+            try {
+                // Try to find favicon link in the document
+                const faviconUrl = await webview.executeJavaScript(`
+                    (function() {
+                        // Check for explicit favicon link
+                        const faviconLink = document.querySelector('link[rel="icon"], link[rel="shortcut icon"]');
+                        if (faviconLink && faviconLink.href) {
+                            return faviconLink.href;
+                        }
+
+                        // Fallback to default location
+                        const baseUrl = window.location.origin;
+                        return baseUrl + '/favicon.ico';
+                    })();
+                `);
+
+                if (faviconUrl) {
+                    tab.favicon = faviconUrl;
+                    updateTabFavicon(tab);
+                    updateBookmarkFavicons();
+                }
+            } catch (error) {
+                console.log('Could not extract favicon:', error);
+                // Use default favicon for the domain
+                tab.favicon = getDefaultFavicon(tab.url);
+                updateTabFavicon(tab);
+            }
+        }
+
+        // Get default favicon for a URL
+        function getDefaultFavicon(url) {
+            try {
+                const urlObj = new URL(url);
+                return `${urlObj.protocol}//${urlObj.hostname}/favicon.ico`;
+            } catch (e) {
+                return 'virt://favicon.ico'; // fallback to our favicon
+            }
+        }
+
+        // Update tab favicon display
+        function updateTabFavicon(tab) {
+            const tabElement = document.getElementById(tab.id);
+            if (!tabElement) return;
+
+            let faviconContainer = tabElement.querySelector('.tab-favicon');
+            if (!faviconContainer) {
+                // Create favicon container
+                faviconContainer = document.createElement('div');
+                faviconContainer.className = 'tab-favicon w-4 h-4 mr-1 flex-shrink-0';
+                const titleSpan = tabElement.querySelector('span');
+                tabElement.insertBefore(faviconContainer, titleSpan);
+            }
+
+            // Set favicon image
+            const faviconUrl = tab.favicon || 'virt://favicon.ico';
+            faviconContainer.innerHTML = `<img src="${faviconUrl}" class="w-4 h-4 rounded-sm" onerror="this.style.display='none'" alt="">`;
+        }
+
+        // Update bookmark favicons
+        function updateBookmarkFavicons() {
+            const bookmarkElements = document.querySelectorAll('.dynamic-bookmark');
+            bookmarkElements.forEach(bookmarkElement => {
+                const bookmarkUrl = bookmarkElement.dataset.url;
+                if (bookmarkUrl) {
+                    const favicon = getBookmarkFavicon(bookmarkUrl);
+                    const iconContainer = bookmarkElement.querySelector('.bookmark-favicon');
+                    if (iconContainer) {
+                        iconContainer.innerHTML = `<img src="${favicon}" class="w-4 h-4 rounded" onerror="this.style.display='none'" alt="">`;
+                    }
+                }
+            });
+        }
+
+        // Get favicon for a bookmark URL
+        function getBookmarkFavicon(url) {
+            if (faviconCache.has(url)) {
+                return faviconCache.get(url);
+            }
+
+            // Check if any tab has this URL and has a favicon
+            const tabWithUrl = tabs.find(tab => tab.url === url && tab.favicon);
+            if (tabWithUrl) {
+                faviconCache.set(url, tabWithUrl.favicon);
+                return tabWithUrl.favicon;
+            }
+
+            // Use default favicon
+            const defaultFavicon = getDefaultFavicon(url);
+            faviconCache.set(url, defaultFavicon);
+            return defaultFavicon;
+        }
+
+        // Bookmark functionality
+        async function loadBookmarks() {
+            try {
+                currentBookmarks = await window.electronAPI.getBookmarks();
+                const bookmarkBar = document.querySelector('.bg-gray-50.px-3.py-1');
+
+                // Clear existing dynamic bookmarks (keep the static ones for now)
+                const existingDynamicBookmarks = bookmarkBar.querySelectorAll('.dynamic-bookmark');
+                existingDynamicBookmarks.forEach(bookmark => bookmark.remove());
+
+                // Add user bookmarks after the static ones
+                if (currentBookmarks.roots && currentBookmarks.roots.bookmark_bar && currentBookmarks.roots.bookmark_bar.children) {
+                    currentBookmarks.roots.bookmark_bar.children.forEach(bookmark => {
+                        const bookmarkElement = document.createElement('a');
+                        bookmarkElement.href = '#';
+                        bookmarkElement.className = 'dynamic-bookmark flex items-center gap-2 px-3 py-1 hover:bg-gray-200 rounded transition text-sm text-gray-700 whitespace-nowrap';
+                        bookmarkElement.dataset.url = bookmark.url;
+
+                        const favicon = getBookmarkFavicon(bookmark.url);
+                        bookmarkElement.innerHTML = `
+                            <div class="bookmark-favicon w-4 h-4 flex-shrink-0">
+                                <img src="${favicon}" class="w-4 h-4 rounded" onerror="this.style.display='none'" alt="">
+                            </div>
+                            ${bookmark.name}
+                        `;
+
+                        bookmarkElement.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            navigateToBookmark(bookmark.url);
+                        });
+
+                        bookmarkBar.appendChild(bookmarkElement);
+                    });
+                }
+
+                // Update bookmark star state for current page
+                updateBookmarkStarState();
+            } catch (error) {
+                console.error('Error loading bookmarks:', error);
+            }
+        }
+
+        function updateBookmarkStarState() {
+            const currentUrl = document.getElementById('addressBar').value;
+            const bookmarkBtn = document.getElementById('bookmarkBtn');
+            const starSvg = bookmarkBtn.querySelector('svg');
+
+            // Check if current URL is bookmarked
+            const isBookmarked = currentBookmarks.roots &&
+                                currentBookmarks.roots.bookmark_bar &&
+                                currentBookmarks.roots.bookmark_bar.children &&
+                                currentBookmarks.roots.bookmark_bar.children.some(b => b.url === currentUrl);
+
+            if (isBookmarked) {
+                // Filled star for bookmarked pages
+                starSvg.innerHTML = '<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/>';
+                starSvg.className = 'w-4 h-4 text-yellow-500';
+                bookmarkBtn.title = 'Remove bookmark';
+            } else {
+                // Outline star for non-bookmarked pages
+                starSvg.innerHTML = '<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>';
+                starSvg.className = 'w-4 h-4 text-gray-400';
+                bookmarkBtn.title = 'Bookmark this page';
+            }
+        }
+
+        async function navigateToBookmark(url) {
+            const activeTab = tabs.find(tab => tab.isActive);
+            if (activeTab) {
+                activeTab.url = url;
+                activeTab.title = 'Loading...';
+
+                const tabElement = document.getElementById(activeTab.id);
+                if (tabElement) {
+                    tabElement.querySelector('span').textContent = 'Loading...';
+                }
+
+                if (activeTab.webviewElement) {
+                    activeTab.webviewElement.src = url;
+                } else {
+                    activeTab.tabType = 'webview';
+                    loadTabContent(activeTab);
+                }
+
+                document.getElementById('addressBar').value = url;
+            }
+        }
+
+        async function handleBookmarkClick() {
+            const currentUrl = document.getElementById('addressBar').value;
+            if (!currentUrl) {
+                alert('No page to bookmark');
+                return;
+            }
+
+            try {
+                // Check if already bookmarked - if so, remove it
+                const isBookmarked = currentBookmarks.roots &&
+                                    currentBookmarks.roots.bookmark_bar &&
+                                    currentBookmarks.roots.bookmark_bar.children &&
+                                    currentBookmarks.roots.bookmark_bar.children.some(b => b.url === currentUrl);
+
+                if (isBookmarked) {
+                    // Remove bookmark
+                    const bookmarkToRemove = currentBookmarks.roots.bookmark_bar.children.find(b => b.url === currentUrl);
+                    if (bookmarkToRemove) {
+                        const result = await window.electronAPI.removeBookmark(bookmarkToRemove.id);
+                        if (result.success) {
+                            alert('Bookmark removed!');
+                            loadBookmarks(); // Refresh bookmark bar
+                        } else {
+                            alert('Failed to remove bookmark');
+                        }
+                    }
+                } else {
+                    // Add bookmark
+                    // Get current page title from active webview
+                    const activeTab = tabs.find(tab => tab.isActive);
+                    let pageTitle = currentUrl;
+
+                    if (activeTab && activeTab.webviewElement) {
+                        try {
+                            pageTitle = await new Promise((resolve) => {
+                                activeTab.webviewElement.executeJavaScript('document.title').then(title => {
+                                    resolve(title || currentUrl);
+                                }).catch(() => {
+                                    resolve(currentUrl);
+                                });
+                            });
+                        } catch (e) {
+                            console.log('Could not get page title, using URL');
+                        }
+                    }
+
+                    const result = await window.electronAPI.addBookmark({
+                        url: currentUrl,
+                        title: pageTitle
+                    });
+
+                    if (result.success) {
+                        alert('Page bookmarked successfully!');
+                        loadBookmarks(); // Refresh bookmark bar
+                    } else {
+                        alert(result.message || 'Failed to bookmark page');
+                    }
+                }
+            } catch (error) {
+                console.error('Error with bookmark:', error);
+                alert('Error with bookmark');
+            }
+        }
+
+        // Monitor address bar changes to update bookmark star state
+        function setupAddressBarMonitoring() {
+            const addressBar = document.getElementById('addressBar');
+
+            // Update star state when address bar changes
+            addressBar.addEventListener('input', updateBookmarkStarState);
+            addressBar.addEventListener('change', updateBookmarkStarState);
+            addressBar.addEventListener('blur', updateBookmarkStarState);
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            initBrowser();
+            loadBookmarks(); // Load bookmarks on startup
+            setupAddressBarMonitoring(); // Monitor address bar for bookmark state updates
+
+            // Add bookmark button handler
+            document.getElementById('bookmarkBtn').addEventListener('click', handleBookmarkClick);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+{
+  "name": "@virtron/v12-browser3",
+  "version": "1.0.0",
+  "description": "VIRT Browser - A revolutionary developer-focused browser with custom protocol for decentralized web browsing",
+  "main": "main.js",
+  "homepage": "https://github.com/Vince489/VIRT-Browser-3",
+  "scripts": {
+    "start": "electron .",
+    "dev": "NODE_ENV=development electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "dist": "electron-builder --publish=never",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vince489/VIRT-Browser-3.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Vince489/VIRT-Browser-3/issues"
+  },
+  "keywords": [
+    "electron",
+    "browser",
+    "developer-tools",
+    "walled-garden",
+    "virt-protocol",
+    "decentralized-web",
+    "custom-protocol"
+  ],
+  "author": "Vincent M Cornelius II <vincentcornelius489@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "devDependencies": {
+    "electron": "^40.0.0",
+    "electron-builder": "26.4.1"
+  },
+  "build": {
+    "appId": "com.virt.browser.v12",
+    "productName": "VIRT Browser",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "node_modules/**/*",
+      "!src/**/*.test.js",
+      "!dist/**/*",
+      "!.git/**/*",
+      "!**/*.md",
+      "!**/*.log"
+    ],
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": "dmg",
+      "icon": "icon-512.png"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico",
+      "verifyUpdateCodeSignature": false,
+      "requestedExecutionLevel": "asInvoker",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "icon.ico",
+      "uninstallerIcon": "icon.ico",
+      "installerHeaderIcon": "icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "VIRT Browser"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "icon-512.png",
+      "category": "Development"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "Vince489",
+      "repo": "VIRT-Browser-3"
+    }
+  }
+}

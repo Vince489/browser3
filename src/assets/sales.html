@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V12 Browser</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .gradient-animate {
+            background-size: 200% 200%;
+            animation: gradient 15s ease infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-lg flex items-center justify-center font-bold text-xl">
+                    V12
+                </div>
+                <span class="text-xl font-bold">V12 Browser</span>
+            </div>
+            <div class="hidden md:flex gap-8">
+                <a href="#features" class="hover:text-teal-400 transition">Features</a>
+                <a href="#virt-protocol" class="hover:text-teal-400 transition">VIRT Protocol</a>
+                <a href="#parallel-internet" class="hover:text-teal-400 transition">Parallel Internet</a>
+                <a href="#developers" class="hover:text-teal-400 transition">For Developers</a>
+                <a href="#download" class="hover:text-teal-400 transition">Download</a>
+            </div>
+            <a href="#download" class="bg-teal-600 hover:bg-teal-700 px-6 py-2 rounded-lg font-medium transition">
+                Download Now
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-6 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-teal-900/20 via-cyan-900/20 to-blue-900/20 gradient-animate"></div>
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                        The Developer's Walled Garden
+                    </h1>
+                    <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+                        V12 Browser creates a secure, curated ecosystem where developers can experiment, 
+                        collaborate, and share their projects through the revolutionary VIRT:// protocol.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#download" class="bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 px-8 py-4 rounded-lg font-semibold text-lg transition flex items-center gap-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                            Download for Windows
+                        </a>
+                        <a href="#virt-protocol" class="border border-gray-700 hover:border-gray-600 px-8 py-4 rounded-lg font-semibold text-lg transition">
+                            Learn More
+                        </a>
+                    </div>
+                    <div class="mt-8 flex items-center gap-6 text-sm text-gray-400">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Open Source
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Privacy First
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Built on Electron
+                        </div>
+                    </div>
+                </div>
+                <div class="float-animation">
+                    <div class="bg-gray-800 rounded-2xl shadow-2xl border border-gray-700 overflow-hidden">
+                        <div class="bg-gray-700 px-4 py-3 flex items-center gap-2">
+                            <div class="flex gap-2">
+                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            </div>
+                            <div class="flex-1 text-center text-sm text-gray-400">V12 Browser</div>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="bg-gray-700/50 rounded-lg p-4 border border-blue-500/30">
+                                <div class="flex items-center gap-2 text-blue-400 mb-2">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                    </svg>
+                                    <code class="text-sm">virt://my-project.vc</code>
+                                </div>
+                                <p class="text-gray-300 text-sm">Your GitHub repo, instantly browsable</p>
+                            </div>
+                            <div class="bg-gray-700/50 rounded-lg p-4">
+                                <div class="text-gray-400 text-xs mb-2">VIRT DOMAIN REGISTRY</div>
+                                <div class="space-y-2">
+                                    <div class="flex items-center gap-2 text-sm">
+                                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                                        <span class="text-gray-300">my-app.vc → github.com/user/my-app</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm">
+                                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                                        <span class="text-gray-300">docs.lit → github.com/user/docs</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sm">
+                                        <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                                        <span class="text-gray-300">portfolio.at → github.com/user/portfolio</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 px-6 bg-gray-800/50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Why V12 Browser?</h2>
+                <p class="text-xl text-gray-400">A browser built specifically for developers, by developers</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gray-800 rounded-xl p-8 border border-gray-700 hover:border-teal-500/50 transition">
+                    <div class="w-12 h-12 bg-teal-500/20 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Instant Deployment</h3>
+                    <p class="text-gray-400">Push to GitHub and your site is live on the VIRT protocol instantly. No build steps, no hosting fees.</p>
+                </div>
+                <div class="bg-gray-800 rounded-xl p-8 border border-gray-700 hover:border-cyan-500/50 transition">
+                    <div class="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Secure Sandbox</h3>
+                    <p class="text-gray-400">Every VIRT site runs in isolation. Experiment freely without compromising security.</p>
+                </div>
+                <div class="bg-gray-800 rounded-xl p-8 border border-gray-700 hover:border-blue-500/50 transition">
+                    <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Built-in Discovery</h3>
+                    <p class="text-gray-400">The lookin.at search engine helps developers find and share projects within the ecosystem.</p>
+                </div>
+                <div class="bg-gray-800 rounded-xl p-8 border border-gray-700 hover:border-green-500/50 transition">
+                    <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Developer First</h3>
+                    <p class="text-gray-400">Built with Electron and Node.js. Inspect, modify, and contribute to the browser itself.</p>
+                </div>
+                <div class="bg-gray-800 rounded-xl p-8 border border-gray-700 hover:border-yellow-500/50 transition">
+                    <div class="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Community Driven</h3>
+                    <p class="text-gray-400">Join a growing community of developers building the future of the decentralized web.</p>
+                </div>
+                <div class="bg-gray-800 rounded-xl p-8 border border-gray-700 hover:border-indigo-500/50 transition">
+                    <div class="w-12 h-12 bg-indigo-500/20 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Privacy Focused</h3>
+                    <p class="text-gray-400">No tracking, no ads, no data collection. Your browsing stays private, always.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIRT Protocol Section -->
+    <section id="virt-protocol" class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <div class="inline-block bg-teal-500/10 border border-teal-500/30 rounded-full px-6 py-2 mb-4">
+                    <span class="text-teal-400 font-semibold">The Technology</span>
+                </div>
+                <h2 class="text-4xl font-bold mb-4">Understanding the VIRT:// Protocol</h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    A custom browser protocol that transforms any GitHub repository into a browsable website
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+                <div>
+                    <h3 class="text-2xl font-bold mb-6">How It Works</h3>
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center font-bold">1</div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Register Your Domain</h4>
+                                <p class="text-gray-400">Visit virt://register.at and claim your domain name (.vc, .vmc, .at, or .lit)</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 bg-cyan-500 rounded-full flex items-center justify-center font-bold">2</div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Link Your GitHub Repo</h4>
+                                <p class="text-gray-400">Point your domain to any public GitHub repository containing your website files</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center font-bold">3</div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Instant Deployment</h4>
+                                <p class="text-gray-400">Your site is live immediately. Push updates to GitHub and they appear in real-time</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 bg-green-500 rounded-full flex items-center justify-center font-bold">4</div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Get Discovered</h4>
+                                <p class="text-gray-400">Your site is automatically indexed by lookin.at for the community to find</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700">
+                    <div class="text-xs text-gray-500 mb-2">EXAMPLE REGISTRATION</div>
+                    <pre class="bg-gray-900 rounded-lg p-4 text-sm overflow-x-auto"><code class="text-green-400">Domain: my-awesome-project
+TLD: .vc
+GitHub URL: https://github.com/username/my-awesome-project
+Branch: main
+
+Result: virt://my-awesome-project.vc</code></pre>
+                    
+                    <div class="mt-6 text-xs text-gray-500 mb-2">AVAILABLE TLDs</div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-gray-900 rounded-lg p-3">
+                            <div class="text-teal-400 font-mono font-bold">.vc</div>
+                            <div class="text-xs text-gray-500">Venture / Company</div>
+                        </div>
+                        <div class="bg-gray-900 rounded-lg p-3">
+                            <div class="text-cyan-400 font-mono font-bold">.vmc</div>
+                            <div class="text-xs text-gray-500">Virtual Machine</div>
+                        </div>
+                        <div class="bg-gray-900 rounded-lg p-3">
+                            <div class="text-blue-400 font-mono font-bold">.at</div>
+                            <div class="text-xs text-gray-500">App / Tool</div>
+                        </div>
+                        <div class="bg-gray-900 rounded-lg p-3">
+                            <div class="text-green-400 font-mono font-bold">.lit</div>
+                            <div class="text-xs text-gray-500">Literature / Docs</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-teal-900/30 to-cyan-900/30 rounded-2xl p-8 border border-teal-500/30">
+                <h3 class="text-2xl font-bold mb-4">Technical Architecture</h3>
+                <div class="grid md:grid-cols-3 gap-6 text-sm">
+                    <div>
+                        <h4 class="font-semibold text-teal-400 mb-2">Browser Layer</h4>
+                        <ul class="space-y-1 text-gray-400">
+                            <li>• Electron 30.x</li>
+                            <li>• Custom Protocol Handler</li>
+                            <li>• Sandboxed Execution</li>
+                            <li>• WebView Integration</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-cyan-400 mb-2">Backend Layer</h4>
+                        <ul class="space-y-1 text-gray-400">
+                            <li>• Node.js 20.x LTS</li>
+                            <li>• Express REST API</li>
+                            <li>• MongoDB Registry</li>
+                            <li>• Domain Resolution</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-blue-400 mb-2">Content Layer</h4>
+                        <ul class="space-y-1 text-gray-400">
+                            <li>• GitHub Raw Content</li>
+                            <li>• Real-time Updates</li>
+                            <li>• Version Control</li>
+                            <li>• Zero Build Pipeline</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- For Developers Section -->
+    <section id="developers" class="py-20 px-6 bg-gray-800/50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Built for Developers</h2>
+                <p class="text-xl text-gray-400">Everything you need to create and share your projects</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-gray-800 rounded-xl p-8 border border-gray-700">
+                    <h3 class="text-2xl font-bold mb-4">Quick Start Guide</h3>
+                    <div class="space-y-4">
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <div class="text-sm text-gray-500 mb-2">1. Create your project</div>
+                            <code class="text-sm text-green-400">mkdir my-virt-site && cd my-virt-site</code>
+                        </div>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <div class="text-sm text-gray-500 mb-2">2. Add an index.html</div>
+                            <code class="text-sm text-green-400">echo "&lt;h1&gt;Hello VIRT&lt;/h1&gt;" > index.html</code>
+                        </div>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <div class="text-sm text-gray-500 mb-2">3. Push to GitHub</div>
+                            <code class="text-sm text-green-400">git init && git add . && git commit -m "init"</code>
+                        </div>
+                        <div class="bg-gray-900 rounded-lg p-4">
+                            <div class="text-sm text-gray-500 mb-2">4. Register in V12 Browser</div>
+                            <code class="text-sm text-green-400">Visit virt://register.at</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-800 rounded-xl p-8 border border-gray-700">
+                    <h3 class="text-2xl font-bold mb-4">Use Cases</h3>
+                    <div class="space-y-4">
+                        <div class="flex gap-3 items-start">
+                            <div class="w-8 h-8 bg-teal-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">Portfolio Sites</h4>
+                                <p class="text-sm text-gray-400">Showcase your work with a custom VIRT domain</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 items-start">
+                            <div class="w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">Documentation</h4>
+                                <p class="text-sm text-gray-400">Host technical docs with the .lit TLD</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 items-start">
+                            <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">Experiments</h4>
+                                <p class="text-sm text-gray-400">Test and share prototypes in a safe sandbox</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3 items-start">
+                            <div class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-1">API Development</h4>
+                                <p class="text-sm text-gray-400">Build and test APIs within the VIRT ecosystem</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="parallel-internet" class="py-20 px-6 bg-gradient-to-b from-gray-900 to-gray-800 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="order-2 md:order-1">
+                    <div class="bg-gray-900 rounded-2xl p-8 border-2 border-dashed border-teal-500/30 relative overflow-hidden group">
+                        <div class="absolute -top-10 -right-10 w-40 h-40 bg-teal-500/10 rounded-full blur-3xl group-hover:bg-teal-500/20 transition-all"></div>
+
+                        <h3 class="text-2xl font-mono font-bold text-teal-400 mb-6 flex items-center gap-3">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path>
+                            </svg>
+                            [MODE: UNRESTRICTED]
+                        </h3>
+
+                        <div class="space-y-4 font-mono text-sm">
+                            <div class="p-3 bg-teal-950/30 rounded border border-teal-500/20">
+                                <span class="text-gray-500"># Local Dev Bridge</span><br>
+                                <span class="text-teal-400">DOMAIN:</span> local.at<br>
+                                <span class="text-teal-400">TARGET:</span> http://127.0.0.1:8080
+                            </div>
+                            <div class="p-3 bg-cyan-950/30 rounded border border-cyan-500/20">
+                                <span class="text-gray-500"># Home-Lab Node</span><br>
+                                <span class="text-cyan-400">DOMAIN:</span> my-node.vc<br>
+                                <span class="text-cyan-400">TARGET:</span> http://74.12.190.11:3000
+                            </div>
+                            <div class="p-3 bg-purple-950/30 rounded border border-purple-500/20">
+                                <span class="text-gray-500"># Darknet Gateway</span><br>
+                                <span class="text-purple-400">DOMAIN:</span> secret.lit<br>
+                                <span class="text-purple-400">TARGET:</span> http://v2pt...onion
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-6 border-t border-gray-800 text-xs text-gray-500 italic">
+                            "V12 doesn't just browse the web; it creates the infrastructure for your own."
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-1 md:order-2">
+                    <div class="inline-block bg-purple-500/10 border border-purple-500/30 rounded-full px-6 py-2 mb-6">
+                        <span class="text-purple-400 font-semibold tracking-widest uppercase text-xs">Parallel Internet Mode</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">Host Anywhere.<br>Browse Everywhere.</h2>
+                    <p class="text-xl text-gray-400 mb-8 leading-relaxed">
+                        V12 is more than a GitHub viewer. It's a decentralized routing layer for the modern pioneer. Point your <span class="text-teal-400 font-mono">virt://</span> domains to any IP, any port, or any local service.
+                    </p>
+
+                    <ul class="space-y-4 mb-10">
+                        <li class="flex items-start gap-3">
+                            <div class="mt-1 bg-teal-500/20 p-1 rounded">
+                                <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <p class="text-gray-300"><strong class="text-white">Zero-Config Intranets:</strong> Build a private company or family network using the .vc TLD pointing to internal server IPs.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="mt-1 bg-teal-500/20 p-1 rounded">
+                                <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <p class="text-gray-300"><strong class="text-white">Localhost Aliasing:</strong> Stop typing IP addresses. Map <code class="bg-gray-800 px-1 rounded text-teal-400">virt://dev.at</code> to your current build for seamless local testing.</p>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="mt-1 bg-teal-500/20 p-1 rounded">
+                                <svg class="w-4 h-4 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <p class="text-gray-300"><strong class="text-white">Hardware Integration:</strong> Point a domain to a Raspberry Pi or IoT gateway for a clean, human-readable interface to your hardware.</p>
+                        </li>
+                    </ul>
+
+                    <div class="p-4 bg-gray-800 rounded-lg border-l-4 border-purple-500">
+                        <p class="text-sm text-gray-400">
+                            <span class="text-purple-400 font-bold">PRO TIP:</span> Use Zipidy to index your private IP sites by allowing the crawler access to your local network.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="py-20 px-6 bg-gray-800/50">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="inline-block bg-teal-500/10 border border-teal-500/30 rounded-full px-6 py-2 mb-8">
+                <span class="text-teal-400 font-semibold">Get Started</span>
+            </div>
+            <h2 class="text-4xl font-bold mb-8">Download V12 Browser</h2>
+            <p class="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
+                Join the developer community building the future of web browsing. Free, open source, and ready to use.
+            </p>
+            <div class="grid md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-teal-500/50 transition group">
+                    <div class="w-16 h-16 bg-teal-500/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-teal-500/30 transition">
+                        <svg class="w-8 h-8 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Windows</h3>
+                    <p class="text-gray-400 mb-4">Version 1.0.0 (Beta)</p>
+                    <button class="bg-teal-600 hover:bg-teal-700 px-6 py-3 rounded-lg font-semibold transition w-full">
+                        Download .exe (45MB)
+                    </button>
+                </div>
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-cyan-500/50 transition group">
+                    <div class="w-16 h-16 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-cyan-500/30 transition">
+                        <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">macOS</h3>
+                    <p class="text-gray-400 mb-4">Coming Soon</p>
+                    <button class="bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold transition w-full cursor-not-allowed" disabled>
+                        Coming Soon
+                    </button>
+                </div>
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 hover:border-blue-500/50 transition group">
+                    <div class="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-500/30 transition">
+                        <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Linux</h3>
+                    <p class="text-gray-400 mb-4">Coming Soon</p>
+                    <button class="bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold transition w-full cursor-not-allowed" disabled>
+                        Coming Soon
+                    </button>
+                </div>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700 max-w-2xl mx-auto">
+                <h4 class="text-lg font-bold mb-2">System Requirements</h4>
+                <div class="grid md:grid-cols-2 gap-4 text-sm text-gray-400">
+                    <div>
+                        <strong class="text-gray-300">Minimum:</strong>
+                        <ul class="mt-1 space-y-1">
+                            <li>• Windows 10 (64-bit)</li>
+                            <li>• 4GB RAM</li>
+                            <li>• 500MB disk space</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong class="text-gray-300">Recommended:</strong>
+                        <ul class="mt-1 space-y-1">
+                            <li>• Windows 11 (64-bit)</li>
+                            <li>• 8GB RAM</li>
+                            <li>• 1GB disk space</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="community" class="py-20 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Join the Community</h2>
+                <p class="text-xl text-gray-400">Connect with developers building the future of the web</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <div class="bg-gray-800 rounded-xl p-8 border border-gray-700 text-center">
+                    <div class="w-16 h-16 bg-teal-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">1,200+</h3>
+                    <p class="text-gray-400">Active Developers</p>
+                </div>
+                <div class="bg-gray-800 rounded-xl p-8 border border-gray-700 text-center">
+                    <div class="w-16 h-16 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">850+</h3>
+                    <p class="text-gray-400">VIRT Domains</p>
+                </div>
+                <div class="bg-gray-800 rounded-xl p-8 border border-gray-700 text-center">
+                    <div class="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2">50K+</h3>
+                    <p class="text-gray-400">Page Views</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-gray-800 rounded-xl p-8 border border-gray-700">
+                    <h3 class="text-2xl font-bold mb-6">Featured Projects</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4 p-4 bg-gray-900/50 rounded-lg">
+                            <div class="w-12 h-12 bg-teal-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <span class="text-teal-400 font-bold">R</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">React Dashboard</h4>
+                                <p class="text-sm text-gray-400 mb-2">Modern admin dashboard built with React and V12</p>
+                                <a href="virt://react-dashboard.vc" class="text-teal-400 text-sm hover:underline">virt://react-dashboard.vc</a>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 bg-gray-900/50 rounded-lg">
+                            <div class="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <span class="text-cyan-400 font-bold">V</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Vue Components</h4>
+                                <p class="text-sm text-gray-400 mb-2">Reusable Vue.js components library</p>
+                                <a href="virt://vue-components.at" class="text-teal-400 text-sm hover:underline">virt://vue-components.at</a>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 bg-gray-900/50 rounded-lg">
+                            <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <span class="text-blue-400 font-bold">D</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Docs Site</h4>
+                                <p class="text-sm text-gray-400 mb-2">Technical documentation for V12 Browser</p>
+                                <a href="virt://docs.lit" class="text-teal-400 text-sm hover:underline">virt://docs.lit</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 rounded-xl p-8 border border-gray-700">
+                    <h3 class="text-2xl font-bold mb-6">Latest from the Community</h3>
+                    <div class="space-y-6">
+                        <div class="border-l-4 border-teal-500 pl-4">
+                            <p class="text-gray-300 italic mb-2">"V12 Browser has revolutionized how I share my projects. No more hosting fees or deployment headaches!"</p>
+                            <p class="text-sm text-gray-500">- Sarah Chen, Frontend Developer</p>
+                        </div>
+                        <div class="border-l-4 border-cyan-500 pl-4">
+                            <p class="text-gray-300 italic mb-2">"The VIRT protocol makes prototyping so much faster. Push to GitHub and you're live instantly."</p>
+                            <p class="text-sm text-gray-500">- Mike Johnson, Full Stack Developer</p>
+                        </div>
+                        <div class="border-l-4 border-blue-500 pl-4">
+                            <p class="text-gray-300 italic mb-2">"Finally, a browser built for developers by developers. The sandbox security gives me peace of mind."</p>
+                            <p class="text-sm text-gray-500">- Alex Rivera, DevOps Engineer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Specs Section -->
+    <section id="specs" class="py-20 px-6 bg-gray-800/50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <div class="inline-block bg-teal-500/10 border border-teal-500/30 rounded-full px-6 py-2 mb-4">
+                    <span class="text-teal-400 font-semibold">Technical Details</span>
+                </div>
+                <h2 class="text-4xl font-bold mb-4">Performance & Security</h2>
+                <p class="text-xl text-gray-400">Built on modern web technologies for speed and reliability</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 text-center">
+                    <div class="w-12 h-12 bg-teal-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Fast Startup</h3>
+                    <p class="text-sm text-gray-400">Launches in under 2 seconds on modern hardware</p>
+                </div>
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 text-center">
+                    <div class="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Secure by Default</h3>
+                    <p class="text-sm text-gray-400">Chromium sandbox + VIRT isolation</p>
+                </div>
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 text-center">
+                    <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Memory Efficient</h3>
+                    <p class="text-sm text-gray-400">~150MB RAM usage at idle</p>
+                </div>
+                <div class="bg-gray-800 rounded-xl p-6 border border-gray-700 text-center">
+                    <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2">Privacy Focused</h3>
+                    <p class="text-sm text-gray-400">Zero telemetry, zero tracking</p>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 rounded-xl p-8 border border-gray-700">
+                <h3 class="text-2xl font-bold mb-6 text-center">Browser Compatibility</h3>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div>
+                        <h4 class="font-semibold text-teal-400 mb-3">Modern Web Standards</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li>• ES2024 JavaScript</li>
+                            <li>• CSS Grid & Flexbox</li>
+                            <li>• WebGL 2.0</li>
+                            <li>• Service Workers</li>
+                            <li>• WebAssembly</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-cyan-400 mb-3">Developer Tools</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li>• Chrome DevTools</li>
+                            <li>• Network Inspector</li>
+                            <li>• Performance Profiler</li>
+                            <li>• Console & Debugging</li>
+                            <li>• Local Storage Viewer</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-blue-400 mb-3">VIRT Features</h4>
+                        <ul class="space-y-2 text-sm text-gray-400">
+                            <li>• Custom Protocol Handler</li>
+                            <li>• GitHub Integration</li>
+                            <li>• Domain Registry</li>
+                            <li>• Sandboxed Execution</li>
+                            <li>• Real-time Updates</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-800 py-12 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-lg flex items-center justify-center font-bold text-xl">
+                            V12
+                        </div>
+                        <span class="text-xl font-bold">V12 Browser</span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        The developer's walled garden. A secure, curated ecosystem for building and sharing web projects through the revolutionary VIRT protocol.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4">Product</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#features" class="hover:text-teal-400 transition">Features</a></li>
+                        <li><a href="#virt-protocol" class="hover:text-teal-400 transition">VIRT Protocol</a></li>
+                        <li><a href="#download" class="hover:text-teal-400 transition">Download</a></li>
+                        <li><a href="#specs" class="hover:text-teal-400 transition">Technical Specs</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4">Community</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="https://github.com/vince489/vrt-browser" class="hover:text-teal-400 transition">GitHub</a></li>
+                        <li><a href="virt://register.at" class="hover:text-teal-400 transition">Register Domain</a></li>
+                        <li><a href="virt://lookin.at" class="hover:text-teal-400 transition">Search VIRT</a></li>
+                        <li><a href="https://github.com/vince489/vrt-browser/discussions" class="hover:text-teal-400 transition">Discussions</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="https://github.com/vince489/vrt-browser/issues" class="hover:text-teal-400 transition">Report Issue</a></li>
+                        <li><a href="https://github.com/vince489/vrt-browser/blob/main/README.md" class="hover:text-teal-400 transition">Documentation</a></li>
+                        <li><a href="#privacy" class="hover:text-teal-400 transition">Privacy Policy</a></li>
+                        <li><a href="#terms" class="hover:text-teal-400 transition">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <div class="text-sm text-gray-500 mb-4 md:mb-0">
+                    <p>&copy; 2026 V12 Browser. Built with ❤️ by developers, for developers.</p>
+                    <p class="mt-1">Version 1.0.0 (Beta) - Open Source under MIT License</p>
+                </div>
+                <div class="flex gap-6">
+                    <a href="https://github.com/vince489/vrt-browser" class="text-gray-500 hover:text-teal-400 transition">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
+                    <a href="https://twitter.com/v12browser" class="text-gray-500 hover:text-teal-400 transition">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add fade-in animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Apply fade-in to feature cards and other sections
+        document.querySelectorAll('.bg-gray-800.rounded-xl').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
